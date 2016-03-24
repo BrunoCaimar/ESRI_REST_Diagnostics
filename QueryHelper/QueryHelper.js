@@ -1,5 +1,5 @@
 (function () {
-    var d = document,
+	var d = document,
 		wl = window.location,
 		url = wl.href.replace(wl.search, ""),
 		qreg = /\/query\/?$/i,
@@ -24,6 +24,12 @@
 			el[evt] = callback;
 		});
 	}
+	function clearActive() {
+		if (active !== undefined)
+		{
+			active.value = "";
+		}
+	}
 	function build(fields) {
 		var div = d.createElement("div"),
 			listF = d.createElement("select"),
@@ -31,6 +37,13 @@
 			btns = d.createElement("div");
 		div.setAttribute("style", "position:fixed;top:10%;right:0;width:35%;padding:5px;background:#fff;overflow:auto;");
 		div.innerHTML = "<button style=\"float:right;\" onclick=\"this.parentNode.parentNode.removeChild(this.parentNode);\">Close</button><b>Query Builder</b><br />";
+		
+		var clear_button = d.createElement("button");
+		clear_button.textContent = "Clear";
+		clear_button.style = "float: right; margin: 10px -54px 0px 0px;";
+		clear_button.onclick = clearActive;
+		div.appendChild(clear_button);
+		
 		d.body.appendChild(div);
 		listF.setAttribute("size", "10");
 		listF.innerHTML = fields.map(function (field) {
@@ -80,7 +93,7 @@
 			}
 		}
 	}
-    function onLoad(response) {
+	function onLoad(response) {
 		var node = build(response.fields);
 		listenAll(node, "select", "onclick", function (evt) {
 			setActive(evt.currentTarget.value);
@@ -88,10 +101,10 @@
 		listenAll(node, "button.sql", "onclick", function (evt) {
 			setActive(evt.currentTarget.name);
 		});
-    }
+	}
 	// set active blank when clicking on the controls.
 	listenAll(d, "input[type=text], textarea", "onblur", function () { active = this; });
-    if (qreg.test(url)) {
+	if (qreg.test(url)) {
 		ajax(url.replace(qreg, "") + "?f=json", onLoad);
 	} else {
 		if (!/(map|feature)server\/\d+\/?$/i.test(url)) {
