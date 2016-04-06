@@ -6,19 +6,19 @@ var bookmarklet = require('gulp-bookmarklet');
 gulp.task('bookmarklet', ['clean-min'], function() {
     return gulp.src(['**/*.js', '!./**/*.min.js', '!gulpfile.js', '!node_modules/**/*.*'])
         .pipe(bookmarklet({format: 'js'}))
-        .pipe(gulp.dest('min_js'));
+        .pipe(gulp.dest('.'));
 });
 
 gulp.task('bookmarklet-html', ['clean-min'], function() {
     return gulp.src(['**/*.js', '!./**/*.min.js', '!gulpfile.js', '!node_modules/**/*.*'])
         .pipe(bookmarklet({format: 'html'}))
-        .pipe(gulp.dest('min_js'));
+        .pipe(gulp.dest('.'));
 });
 
 gulp.task('bookmarklet-htmlsingle', ['clean-min'], function() {
     return gulp.src(['**/*.js', '!./**/*.min.js', '!gulpfile.js', '!node_modules/**/*.*'])
         .pipe(bookmarklet({format: 'htmlsingle', file: 'bookmarklets.html'}))
-        .pipe(gulp.dest('min_js'));
+        .pipe(gulp.dest('.'));
 });
 
 gulp.task('clean-min', function () {
