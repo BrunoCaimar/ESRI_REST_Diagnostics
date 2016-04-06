@@ -3,16 +3,22 @@ var minify = require('gulp-minify');
 var del = require('del');
 var bookmarklet = require('gulp-bookmarklet');
  
-gulp.task('bookmarklet', function() {
-    return gulp.src(['src/**/*.js', '!gulpfile.js'])
-        .pipe(bookmarklet({format: 'js', file: 'awesome.html'}))
-        .pipe(gulp.dest('min.js'));
+gulp.task('bookmarklet', ['clean-min'], function() {
+    return gulp.src(['**/*.js', '!./**/*.min.js', '!gulpfile.js', '!node_modules/**/*.*'])
+        .pipe(bookmarklet({format: 'js'}))
+        .pipe(gulp.dest('min_js'));
+});
+
+gulp.task('bookmarklet-html', ['clean-min'], function() {
+    return gulp.src(['**/*.js', '!./**/*.min.js', '!gulpfile.js', '!node_modules/**/*.*'])
+        .pipe(bookmarklet({format: 'html'}))
+        .pipe(gulp.dest('min_js'));
 });
 
 gulp.task('clean-min', function () {
   return del([
     'dist',
-    '**/*.min.js'
+	'min_js'
   ]);
 });
 
@@ -30,4 +36,4 @@ gulp.task('compress', ['clean-min'], function() {
     .pipe(gulp.dest('.'))
 });
 
-gulp.task('default', ['compress']);
+gulp.task('default', ['bookmarklet']);
