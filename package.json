@@ -5,6 +5,7 @@
   "main": "gulpfile.js",
   "dependencies": {
     "gulp-bookmarklet": "^1.0.0",
+	"netscape-bookmarks": "^0.0.0",
     "del": "^2.2.0",
     "gulp": "^3.9.1"
   },
