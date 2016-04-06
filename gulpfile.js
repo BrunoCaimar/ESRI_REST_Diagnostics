@@ -15,6 +15,12 @@ gulp.task('bookmarklet-html', ['clean-min'], function() {
         .pipe(gulp.dest('min_js'));
 });
 
+gulp.task('bookmarklet-htmlsingle', ['clean-min'], function() {
+    return gulp.src(['**/*.js', '!./**/*.min.js', '!gulpfile.js', '!node_modules/**/*.*'])
+        .pipe(bookmarklet({format: 'htmlsingle', file: 'bookmarklets.html'}))
+        .pipe(gulp.dest('min_js'));
+});
+
 gulp.task('clean-min', function () {
   return del([
     'dist',
