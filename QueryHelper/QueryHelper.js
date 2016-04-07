@@ -1,5 +1,5 @@
 (function () {
-	var d = document,
+    var d = document,
 		wl = window.location,
 		url = wl.href.replace(wl.search, ""),
 		qreg = /\/query\/?$/i,
@@ -24,16 +24,10 @@
 			el[evt] = callback;
 		});
 	}
-	function clearActive() {
-		if (active !== undefined)
-		{
-			active.value = "";
-		}
-	}
 	function build(fields) {
 		var div = d.createElement("div"),
-			html_select_fields = d.createElement("select"),
-			html_select_values = d.createElement("select"),
+			listF = d.createElement("select"),
+			listR = d.createElement("select"),
 			btns = d.createElement("div");
 		div.setAttribute("style", "position:fixed;top:10%;right:0;width:35%;padding:5px;background:#fff;overflow:auto;");
 		div.innerHTML = "<button style=\"float:right;\" onclick=\"this.parentNode.parentNode.removeChild(this.parentNode);\">Close</button><b>Query Builder</b><br />";
@@ -45,19 +39,16 @@
 		div.appendChild(clear_button);
 		
 		d.body.appendChild(div);
-		html_select_fields.setAttribute("size", "10");
-		html_select_fields.innerHTML = fields.map(function (field) {
+		listF.setAttribute("size", "10");
+		listF.innerHTML = fields.map(function (field) {
 			return ["<option value=\"", field.name, "\">", field.alias, "</option>"].join("");
 		}).join("");
-		div.appendChild(html_select_fields);
-		html_select_values.setAttribute("size", "10");
-		div.appendChild(html_select_values);
-		html_select_fields.onchange = function () {
-			var val = html_select_fields.value;
-			
+		div.appendChild(listF);
+		listR.setAttribute("size", "10");
+		div.appendChild(listR);
+		listF.onchange = function () {
+			var val = listF.value;
 			ajax(url + "?where=1%3D1&returnGeometry=false&outFields=field&orderByFields=field&returnDistinctValues=true&f=json".replace(/field/g, val), function (res) {
-				html_select_values.innerHTML = [].map.call(res.features, function (feature) {
-					return ["<option value=\"", feature.attributes[val], "\">", feature.attributes[val], "</option>"].join("");
 				listR.innerHTML = [].map.call(res.features, function (feature) {
 					feature_value = isNaN(feature.attributes[val] * 1) ? "'" + feature.attributes[val] + "'" : feature.attributes[val];
 					feature_text = feature.attributes[val];
@@ -101,10 +92,10 @@
 				range.select();
 			} else if ("selectionStart" in active) {
 				active.setSelectionRange(iCaretPos, iCaretPos);
-			}
+			}			
 		}
 	}
-	function onLoad(response) {
+    function onLoad(response) {
 		var node = build(response.fields);
 		listenAll(node, "select", "ondblclick", function (evt) {
 			setActive(evt.currentTarget.value);
@@ -112,10 +103,10 @@
 		listenAll(node, "button.sql", "onclick", function (evt) {
 			setActive(evt.currentTarget.name);
 		});
-	}
+    }
 	// set active blank when clicking on the controls.
 	listenAll(d, "input[type=text], textarea", "onblur", function () { active = this; });
-	if (qreg.test(url)) {
+    if (qreg.test(url)) {
 		ajax(url.replace(qreg, "") + "?f=json", onLoad);
 	} else {
 		if (!/(map|feature)server\/\d+\/?$/i.test(url)) {
