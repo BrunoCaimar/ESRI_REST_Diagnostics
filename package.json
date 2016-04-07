@@ -7,7 +7,9 @@
     "gulp": "^3.9.1", 
 	"gulp-bookmarklet": "^1.0.0",
 	"netscape-bookmarks": "^0.0.0",
-    "del": "^2.2.0"    
+    "del": "^2.2.0", 
+	"through2": "^2.0.1", 
+	"vinyl": "^1.1.1"
   },
   "devDependencies": {},
   "scripts": {
@@ -18,7 +20,7 @@
     "url": "git+https://github.com/raykendo/ESRI_REST_Diagnostics.git"
   },
   "author": "Ken Doman",
-  "license": "The MIT License (MIT)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/raykendo/ESRI_REST_Diagnostics/issues"
   },
