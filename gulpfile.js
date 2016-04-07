@@ -10,7 +10,8 @@ gulp.task('bookmarklet', ['clean-min'], function() {
         .pipe(bookmarklet({format: 'js'}))
         .pipe(gulp.dest('.'));
 });
-var what_what = function() {
+var esri_rest_diagnostics = function() {
+	// TODO: Read it from file (bookmarks.json)
 	var bookmarks = {
 	"Map Folder Level:": {
 		"contents": {
@@ -51,32 +52,14 @@ var what_what = function() {
 		}
 	}
 };
-	//var html = netscape(bookmarks);
-	//console.log(html);
-	
 	 return through.obj(function(file, encoding, callback) {
-		//console.log(bookmarks);
-		/* console.log("\n****file.cwd:", file.cwd);
-		console.log("\n****file.path:", file.path);
-		console.log("\n****file.name:", file.path.split("\\").pop());
-		console.log("\n****file.name2:", file.path.split("/").pop()); */
-		if (file.isBuffer()) {
-			//console.log("contents:", file.contents.toString());
-		}
-		//console.log("?????", file);
-		//console.log("?????", encoding);
-		//console.log("?????", callback);
-		
 		function doSomethingWithTheFile(file) {
-			//console.log("doSomethingWithTheFile");
 			var file_name = file.path.split("\\").pop();
 			for (var section in bookmarks) {
 			   for (var bookmark in bookmarks[section].contents) {
 				   var bookmark_file_name = bookmarks[section].contents[bookmark];
-				   //console.log("?????????", bookmark_file_name);
 				   if (bookmark_file_name.toLowerCase() === file_name.toLowerCase())
 				   {
-					   console.log("Achou....", file_name);
 					   bookmarks[section].contents[bookmark] = file.contents.toString();
 					   break;
 				   }
@@ -85,64 +68,37 @@ var what_what = function() {
 		};
 		callback(null, doSomethingWithTheFile(file));
   }, function(callback) {
-		console.log("end_of_stream");
 		var html = netscape(bookmarks);
-		console.log("DoneIt");
+		// TODO: Move it to another function
+		html = html.replace("Bookmarks Menu", "ESRI Rest Diagnostics");
+		html = html.replace("Bookmarks", "ESRI Rest Diagnostics");
+		html = html.replace(/<\/H1>/, "</H1><p>This page provides links to tools that can be used to inspect and pull out data out of ArcGIS REST Services.</p>")
+		html = html.replace(/<DL>/gi, "<UL>");
+		html = html.replace(/<\/DL>/gi, "</UL>");
+		html = html.replace(/<DT>/gi, "<LI>");
+		html = html.replace(/<\/DT>/gi, "</LI>");
+		html = html.replace(/<H3>/gi, "");
+		html = html.replace(/<\/H3>/gi, "");
+		html = html.replace(/<UL><p>/gi, "<UL>");
+		html = html.replace(/<\/UL><p>/gi, "</UL>");
+		html += "</body></html>"
 
-		var bookmarklet_file = new File({
-		  cwd: "c:\\",
-		  base: "C:\\Dev\\Github\\ESRI_REST_Diagnostics\\",
-		  path: "C:\\Dev\\Github\\ESRI_REST_Diagnostics\\AAAAAAAA.html",
+		var bookmarklet_file = new File({		
+		  // TODO: Get name as a parameter
+		  path: "bookmarklets.html",
 		  contents: new Buffer(html)
 		});
-		console.log(bookmarklet_file)
+
         this.push(bookmarklet_file);
 	  callback(null);
   });    
 };
 
-function what_it_now(file, encoding, callback)
-{
-	console.log("file?", file, encoding, callback);
-	return;
-	var bookmarks = {
-	  "Dave Eddy's Blog": "http://www.daveeddy.com",
-	  "Perfume Global": "http://www.perfume-global.com/",
-	  "Unfiled": {
-		"contents": {
-		  "Twitter": "http://twitter.com"
-		}
-	  },
-	  "Second Folder": {
-		"contents": {
-		  "Nested Folders!": {
-			"contents": {
-			  "YouTube": "http://www.youtube.com",
-			  "GitHub": "https://github.com"
-			}
-		  }
-		}
-	  },
-	  "TekZoned": {
-		"url": "http://www.tekzoned.com",
-		"add_date": 1357547237,
-		"last_visit": 1357547238,
-		"last_modified": 1357547239
-	  }
-	};
-
-	var html = netscape(bookmarks);
-	console.log(html);	
-	return;
-}
-
-gulp.task('do_it_now', function () {
+gulp.task('esri_rest_diagnostics', ['bookmarklet'], function () {
 	return gulp.src(["**/*.min.js", '!gulpfile.js', '!node_modules/**/*.*'])
-	//.pipe(what_it_now())
-	.pipe(what_what({opcao: '??'}))
+	.pipe(esri_rest_diagnostics())
 	.pipe(gulp.dest("dest"));
 });
-
 
 gulp.task('bookmarklet-html', ['clean-min'], function() {
     return gulp.src(['**/*.js', '!./**/*.min.js', '!gulpfile.js', '!node_modules/**/*.*'])
@@ -158,9 +114,9 @@ gulp.task('bookmarklet-htmlsingle', ['clean-min'], function() {
 
 gulp.task('clean-min', function () {
   return del([
-    'dist',
-	'min_js'
+    '**/*.min.js',
+	'dest'
   ]);
 });
 
-gulp.task('default', ['bookmarklet', 'bookmarklet-html', 'bookmarklet-htmlsingle']);
+gulp.task('default', ['esri_rest_diagnostics']);
