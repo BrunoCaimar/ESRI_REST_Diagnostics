@@ -8,7 +8,7 @@ var bookmarklets_config = require('./bookmarklets.json');
 
 gulp.task('esri_rest_diagnostics', ['bookmarklet'], function () {
     return gulp.src(["**/*.min.js", '!gulpfile.js', '!node_modules/**/*.*'])
-    .pipe(esri_rest_diagnostics())
+    .pipe(esri_rest_diagnostics({"output_file": "bookmarklets.html"}))
     .pipe(gulp.dest("./"));
 });
 
@@ -39,7 +39,10 @@ gulp.task('clean-min', function () {
 
 gulp.task('default', ['esri_rest_diagnostics']);
 
-var esri_rest_diagnostics = function() {
+var esri_rest_diagnostics = function(opt) {
+	var opt = opt || {};
+	var output_file_name = opt.output_file || "bookmarklets.html";
+
     return through.obj(function(file, encoding, callback) {
         function generate_bookmarklets_html(file) {
             var file_delimiter = file.path.toString().indexOf("\\") > -1 ? "\\" : "/";
@@ -72,10 +75,9 @@ var esri_rest_diagnostics = function() {
         html = html.replace(/<UL><p>/gi, "<UL>");
         html = html.replace(/<\/UL><p>/gi, "</UL>");
         html += "</body></html>"
-
+		
         var bookmarklet_file = new File({
-          // TODO: Get name as a parameter
-          path: "bookmarklets.html",
+          path: output_file_name,
           contents: new Buffer(html)
         });
 
