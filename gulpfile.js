@@ -6,61 +6,16 @@ var through = require('through2');
 var File = require('vinyl');
 var bookmarklets_config = require('./bookmarklets.json');
 
+gulp.task('esri_rest_diagnostics', ['bookmarklet'], function () {
+    return gulp.src(["**/*.min.js", '!gulpfile.js', '!node_modules/**/*.*'])
+    .pipe(esri_rest_diagnostics())
+    .pipe(gulp.dest("dest"));
+});
+
 gulp.task('bookmarklet', ['clean-min'], function() {
     return gulp.src(['**/*.js', '!./**/*.min.js', '!gulpfile.js', '!node_modules/**/*.*'])
         .pipe(bookmarklet({format: 'js'}))
         .pipe(gulp.dest('.'));
-});
-
-var esri_rest_diagnostics = function() {
-	return through.obj(function(file, encoding, callback) {
-		function generate_bookmarklets_html(file) {
-			var file_delimiter = file.path.toString().indexOf("\\") > -1 ? "\\" : "/";
-			var file_name = file.path.split(file_delimiter).pop();
-			// TO DO: Think in a better way to do it
-			for (var section in bookmarklets_config) {
-			   for (var bookmark in bookmarklets_config[section].contents) {
-				   var bookmark_file_name = bookmarklets_config[section].contents[bookmark];
-				   if (bookmark_file_name.toLowerCase() === file_name.toLowerCase())
-				   {
-					   bookmarklets_config[section].contents[bookmark] = file.contents.toString();
-					   break;
-				   }
-				}
-			}
-		};
-		callback(null, generate_bookmarklets_html(file));
-	}, function(callback) {
-		var html = netscape(bookmarklets_config);
-		
-		html = html.replace(/Bookmarks Menu/gi, "ESRI Rest Diagnostics");
-		html = html.replace(/Bookmarks/gi, "ESRI Rest Diagnostics");
-		html = html.replace(/<\/H1>/gi, "</H1><p>This page provides links to tools that can be used to inspect and pull out data out of ArcGIS REST Services.</p>")
-		html = html.replace(/<DL>/gi, "<UL>");
-		html = html.replace(/<\/DL>/gi, "</UL>");
-		html = html.replace(/<DT>/gi, "<LI>");
-		html = html.replace(/<\/DT>/gi, "</LI>");
-		html = html.replace(/<H3>/gi, "");
-		html = html.replace(/<\/H3>/gi, "");
-		html = html.replace(/<UL><p>/gi, "<UL>");
-		html = html.replace(/<\/UL><p>/gi, "</UL>");
-		html += "</body></html>"
-
-		var bookmarklet_file = new File({
-		  // TODO: Get name as a parameter
-		  path: "bookmarklets.html",
-		  contents: new Buffer(html)
-		});
-
-		this.push(bookmarklet_file);
-		callback(null);
-	});
-};
-
-gulp.task('esri_rest_diagnostics', ['bookmarklet'], function () {
-	return gulp.src(["**/*.min.js", '!gulpfile.js', '!node_modules/**/*.*'])
-	.pipe(esri_rest_diagnostics())
-	.pipe(gulp.dest("dest"));
 });
 
 gulp.task('bookmarklet-html', ['clean-min'], function() {
@@ -78,8 +33,53 @@ gulp.task('bookmarklet-htmlsingle', ['clean-min'], function() {
 gulp.task('clean-min', function () {
   return del([
     '**/*.min.js',
-	'dest'
+    'dest'
   ]);
 });
 
 gulp.task('default', ['esri_rest_diagnostics']);
+
+var esri_rest_diagnostics = function() {
+    return through.obj(function(file, encoding, callback) {
+        function generate_bookmarklets_html(file) {
+            var file_delimiter = file.path.toString().indexOf("\\") > -1 ? "\\" : "/";
+            var file_name = file.path.split(file_delimiter).pop();
+            // TO DO: Think in a better way to do it
+            for (var section in bookmarklets_config) {
+               for (var bookmark in bookmarklets_config[section].contents) {
+                   var bookmark_file_name = bookmarklets_config[section].contents[bookmark];
+                   if (bookmark_file_name.toLowerCase() === file_name.toLowerCase())
+                   {
+                       bookmarklets_config[section].contents[bookmark] = file.contents.toString();
+                       break;
+                   }
+                }
+            }
+        };
+        callback(null, generate_bookmarklets_html(file));
+    }, function(callback) {
+        var html = netscape(bookmarklets_config);
+        
+        html = html.replace(/Bookmarks Menu/gi, "ESRI Rest Diagnostics");
+        html = html.replace(/Bookmarks/gi, "ESRI Rest Diagnostics");
+        html = html.replace(/<\/H1>/gi, "</H1><p>This page provides links to tools that can be used to inspect and pull out data out of ArcGIS REST Services.</p>")
+        html = html.replace(/<DL>/gi, "<UL>");
+        html = html.replace(/<\/DL>/gi, "</UL>");
+        html = html.replace(/<DT>/gi, "<LI>");
+        html = html.replace(/<\/DT>/gi, "</LI>");
+        html = html.replace(/<H3>/gi, "");
+        html = html.replace(/<\/H3>/gi, "");
+        html = html.replace(/<UL><p>/gi, "<UL>");
+        html = html.replace(/<\/UL><p>/gi, "</UL>");
+        html += "</body></html>"
+
+        var bookmarklet_file = new File({
+          // TODO: Get name as a parameter
+          path: "bookmarklets.html",
+          contents: new Buffer(html)
+        });
+
+        this.push(bookmarklet_file);
+        callback(null);
+    });
+};
