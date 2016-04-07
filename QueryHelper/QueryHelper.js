@@ -37,7 +37,7 @@
 			btns = d.createElement("div");
 		div.setAttribute("style", "position:fixed;top:10%;right:0;width:35%;padding:5px;background:#fff;overflow:auto;");
 		div.innerHTML = "<button style=\"float:right;\" onclick=\"this.parentNode.parentNode.removeChild(this.parentNode);\">Close</button><b>Query Builder</b><br />";
-		
+
 		var clear_button = d.createElement("button");
 		clear_button.textContent = "Clear";
 		clear_button.style = "float: right; margin: 10px -54px 0px 0px;";
@@ -58,6 +58,10 @@
 			ajax(url + "?where=1%3D1&returnGeometry=false&outFields=field&orderByFields=field&returnDistinctValues=true&f=json".replace(/field/g, val), function (res) {
 				html_select_values.innerHTML = [].map.call(res.features, function (feature) {
 					return ["<option value=\"", feature.attributes[val], "\">", feature.attributes[val], "</option>"].join("");
+				listR.innerHTML = [].map.call(res.features, function (feature) {
+					feature_value = isNaN(feature.attributes[val] * 1) ? "'" + feature.attributes[val] + "'" : feature.attributes[val];
+					feature_text = feature.attributes[val];
+					return ["<option value=\"", feature_value, "\">", feature_text, "</option>"].join("");
 				});
 			});
 		};
@@ -66,6 +70,12 @@
 		});
 		div.appendChild(btns);
 		return div;
+	}
+	function clearActive() {
+		if (active !== undefined)
+		{
+			active.value = "";
+		}
 	}
 	function setActive(value) {
 		if (active !== undefined) {
