@@ -1,13 +1,13 @@
 {
   "name": "esri_rest_diagnostics",
   "version": "1.0.0",
-  "description": "Javascript bookmarklets to help you to use ESRI REST Services",
+  "description": "A list of JavaScript bookmarklets that can be used to test ArcGIS Server Map Services through the browser.",
   "main": "gulpfile.js",
   "dependencies": {
-    "gulp-bookmarklet": "^1.0.0",
+    "gulp": "^3.9.1", 
+	"gulp-bookmarklet": "^1.0.0",
 	"netscape-bookmarks": "^0.0.0",
-    "del": "^2.2.0",
-    "gulp": "^3.9.1"
+    "del": "^2.2.0"    
   },
   "devDependencies": {},
   "scripts": {
@@ -15,12 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BrunoCaimar/ESRI_REST_Diagnostics.git"
+    "url": "git+https://github.com/raykendo/ESRI_REST_Diagnostics.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Ken Doman",
+  "license": "The MIT License (MIT)",
   "bugs": {
-    "url": "https://github.com/BrunoCaimar/ESRI_REST_Diagnostics/issues"
+    "url": "https://github.com/raykendo/ESRI_REST_Diagnostics/issues"
   },
-  "homepage": "https://github.com/BrunoCaimar/ESRI_REST_Diagnostics#readme"
+  "homepage": "https://github.com/raykendo/ESRI_REST_Diagnostics#readme"
 }
