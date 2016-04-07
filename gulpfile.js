@@ -9,7 +9,7 @@ var bookmarklets_config = require('./bookmarklets.json');
 gulp.task('esri_rest_diagnostics', ['bookmarklet'], function () {
     return gulp.src(["**/*.min.js", '!gulpfile.js', '!node_modules/**/*.*'])
     .pipe(esri_rest_diagnostics())
-    .pipe(gulp.dest("dest"));
+    .pipe(gulp.dest("./"));
 });
 
 gulp.task('bookmarklet', ['clean-min'], function() {
