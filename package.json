@@ -1,7 +1,7 @@
 {
   "name": "esri_rest_diagnostics",
   "version": "1.0.0",
-  "description": "A list of JavaScript bookmarklets that can be used to test ArcGIS Server Map Services through the browser.",
+  "description": "ESRI Rest Diagnostics - A bookmarklet set to collect data from and to test ArcGIS Server REST Services.",
   "main": "gulpfile.js",
   "dependencies": {
     "gulp": "^3.9.1", 
@@ -24,5 +24,5 @@
   "bugs": {
     "url": "https://github.com/raykendo/ESRI_REST_Diagnostics/issues"
   },
-  "homepage": "https://github.com/raykendo/ESRI_REST_Diagnostics#readme"
+  "homepage": "http://raykendo.github.io/ESRI_REST_Diagnostics"
 }

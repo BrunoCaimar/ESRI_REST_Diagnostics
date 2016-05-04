@@ -31,7 +31,7 @@ gulp.task('bookmarklet-htmlsingle', ['clean-min'], function () {
 });
 
 gulp.task('clean-min', function () {
-    return del(['**/*.min.js', 'dest']);
+    return del(['**/*.min.js', 'bookmarklets.html']);
 });
 
 gulp.task('default', ['esri_rest_diagnostics']);
