@@ -6,3 +6,6 @@ To Do
 - Update readme.md
 - Put some date/version information on readme/bookmarklets.html page
 - Query Helper - Check date fields and how to use it on queries properly
+
+- Create a new bookmarklet to open 'Admin' url (ArcGIS REST Administrator Directory) e.g.: http://services.arcgis.com/qFQYQQeTXZSPY7Fx/ArcGIS/admin/services/FeatureServiceName.FeatureServer/0
+
